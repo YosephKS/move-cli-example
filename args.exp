@@ -1,0 +1,71 @@
+Command `sandbox run sources/debug_script.move --signers 0xf`:
+[debug] signer(0xf)
+Command `sandbox run sources/debug_script.move --signers 0xf`:
+[debug] signer(0xf)
+Command `build`:
+UPDATING GIT DEPENDENCY https://github.com/move-language/move.git
+UPDATING GIT DEPENDENCY https://github.com/move-language/move.git
+UPDATING GIT DEPENDENCY https://github.com/move-language/move.git
+UPDATING GIT DEPENDENCY https://github.com/move-language/move.git
+INCLUDING DEPENDENCY MoveNursery
+INCLUDING DEPENDENCY MoveStdlib
+BUILDING readme
+Command `sandbox publish`:
+Command `sandbox view storage/0x00000000000000000000000000000002/modules/Test.mv`:
+// Move bytecode v6
+module 2.Test {
+use 00000000000000000000000000000001::signer;
+
+
+struct Resource has key {
+	i: u64
+}
+
+public publish(Arg0: &signer) {
+B0:
+	0: MoveLoc[0](Arg0: &signer)
+	1: LdU64(10)
+	2: Pack[0](Resource)
+	3: MoveTo[0](Resource)
+	4: Ret
+}
+public unpublish(Arg0: &signer) {
+B0:
+	0: MoveLoc[0](Arg0: &signer)
+	1: Call signer::address_of(&signer): address
+	2: MoveFrom[0](Resource)
+	3: Unpack[0](Resource)
+	4: Pop
+	5: Ret
+}
+public write(Arg0: &signer, Arg1: u64) {
+B0:
+	0: MoveLoc[1](Arg1: u64)
+	1: MoveLoc[0](Arg0: &signer)
+	2: Call signer::address_of(&signer): address
+	3: MutBorrowGlobal[0](Resource)
+	4: MutBorrowField[0](Resource.i: u64)
+	5: WriteRef
+	6: Ret
+}
+}
+Command `sandbox run sources/test_script.move --signers 0xf -v`:
+Changed resource(s) under 1 address(es):
+  Changed 1 resource(s) under address 0000000000000000000000000000000f:
+    Added type 0x2::Test::Resource: [10, 0, 0, 0, 0, 0, 0, 0] (wrote 40 bytes)
+      key 0x2::Test::Resource {
+          i: 10
+      }
+Wrote 40 bytes of resource ID's and data
+Command `sandbox view storage/0x0000000000000000000000000000000f/resources/0x00000000000000000000000000000002::Test::Resource.bcs`:
+key 0x2::Test::Resource {
+    i: 10
+}
+Command `sandbox run sources/test_unpublish_script.move --signers 0xf -v`:
+Changed resource(s) under 1 address(es):
+  Changed 1 resource(s) under address 0000000000000000000000000000000f:
+    Deleted type 0x2::Test::Resource (wrote 32 bytes)
+      key 0x2::Test::Resource {
+          i: 10
+      }
+Wrote 32 bytes of resource ID's and data
